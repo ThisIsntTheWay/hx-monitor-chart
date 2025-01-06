@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "hx-monitor.fullname" . }}-monitor
+  labels:
+    {{- include "hx-monitor.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "hx-monitor.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "hx-monitor.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      envFrom:
+      - configMapRef:
+          name: {{ include "hx-monitor.fullname" . }}-monitor-config
+      {{- if .Values.components.monitor.config.ngrok.enable }}
+      - secretRef:
+        {{- if .Values.components.monitor.config.ngrok.secret.create }}
+          name: {{ include "hx-monitor.fullname" . }}-monitor-ngrok
+        {{- else }}
+          name: {{ .Values.components.monitor.config.ngrok.secret.secretName }}
+        {{- end }}
+      {{- end }}
+      serviceAccountName: {{ include "hx-monitor.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.components.monitor.image.repository }}:{{ .Values.components.monitor.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: callback
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: whisper-models
+              mountPath: /opt/models_whisper
+      volumes:
+        - name: whisper-models
+          persistentVolumeClaim:
+            claimName: {{ include "hx-monitor.fullname" . }}-monitor-whisper
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "hx-monitor.fullname" . }}-monitor
+  labels:
+    {{- include "hx-monitor.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: 8080
+      targetPort: callback
+      protocol: TCP
+      name: callback
+  selector:
+    {{- include "hx-monitor.selectorLabels" . | nindent 4 }}

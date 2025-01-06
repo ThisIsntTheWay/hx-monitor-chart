@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "hx-monitor.fullname" . }}-monitor-whisper
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.components.monitor.config.whisper.pvc.size | default "1Gi" }}
+  {{- with .Values.components.monitor.config.whisper.pvc.storageClass }}
+  storageClassName: {{ . }}
+  {{- end }}

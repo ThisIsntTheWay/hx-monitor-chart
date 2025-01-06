@@ -1,0 +1,94 @@
+
+replicaCount: 1
+
+# HX-Monitor core components
+components:
+  monitor:
+    image:
+      repository: thisisnttheway/hx-monitor-service
+      tag: "latest"
+    config:
+      env:
+        USE_TWILIO_TRANSCRIPTION: 1
+        USE_WHISPER_TRANSCRIPTION: 0
+        TWILIO_PARTIAL_TRANSCRIPTIONS: 0
+        WHISPER_MODEL: tiny.en
+        WHISPER_MODELS_PATH: ./models_whisper
+        WHISPER_DO_MODEL_DOWNLOAD: 1
+        TWILIO_CALL_LENGTH: 36
+        # TWILIO_CALLBACK_URL will be dynamically set
+      ngrok:
+        enable: create
+        secret:
+          create: true
+          # Only used if create: false. Specify the name of your secret.
+          name: ""
+          authToken: ""
+      whisper:
+        pvc:
+          storageClass: ""
+          size: 1Gi
+  api:
+    image:
+      repository: thisisnttheway/hx-monitor-api-backend
+      tag: "latest"
+  frontend:
+    image:
+      repository: thisisnttheway/hx-monitor-frontend
+      tag: "latest"
+
+# Global image definition
+image:
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+# -------------------------------
+# Global pod configs
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  host: chart-example.local
+  tls: []
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
