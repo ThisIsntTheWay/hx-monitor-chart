@@ -1,6 +1,7 @@
+nameOverride: ""
+fullnameOverride: ""
 
-replicaCount: 1
-
+# -------------------------------
 # -- HX-Monitor core components
 components:
   monitor:
@@ -24,13 +25,14 @@ components:
         enable: create
         secret:
           # -- Create secret. Set to 'false' if you bring your own secret
+          #    Must have key "NGROK_AUTH"
           create: true
           # -- Name of your own custom secret
           name: ""
           # -- ngrok auth token, used if 'create: true'
           authToken: ""
       whisper:
-        # -- PVC used for models
+        # -- PVC used for whisper models
         pvc:
           # -- Create PVC. Set to 'false' if you bring your own
           create: true
@@ -39,32 +41,36 @@ components:
           # -- The following fields are only used if 'create: true'
           storageClass: ""
           size: 1Gi
-
   api:
     replicas: 1
     image:
       repository: thisisnttheway/hx-monitor-api-backend
       tag: "latest"
-
   frontend:
     replicas: 1
     image:
       repository: thisisnttheway/hx-monitor-frontend
       tag: "latest"
 
-# Global image definition
+# -- MongoDB config
+mongoDb:
+  # -- Name of MongoDB secret containing the password
+  #    It needs the key "mongodb-passwords"
+  secretName: ""
+  # -- MongoDB username
+  username: ""
+  # -- MongoDB host
+  host: ""
+  # -- MongoDB port
+  port: 27017
+  # -- HX monitor database name
+  database: "hx"
+
+# -------------------------------
+# -- Global image definitions
 image:
   pullPolicy: IfNotPresent
-
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-
-serviceAccount:
-  create: true
-  automount: true
-  annotations: {}
-  name: ""
 
 # -- Ingress configuration, opiniated
 ingress:
@@ -81,7 +87,13 @@ ingress:
     secretName: ""
 
 # -------------------------------
-# Global pod configs
+# -- Global pod configs
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
 podAnnotations: {}
 podLabels: {}
 

@@ -40,6 +40,8 @@ spec:
           envFrom:
           - configMapRef:
               name: {{ include "hx-monitor.fullname" . }}-monitor-config
+          - configMapRef:
+              name: {{ include "hx-monitor.fullname" . }}-mongo-config
           {{- if .Values.components.monitor.config.ngrok.enable }}
           - secretRef:
             {{- if .Values.components.monitor.config.ngrok.secret.create }}
@@ -47,6 +49,14 @@ spec:
             {{- else }}
               name: {{ .Values.components.monitor.config.ngrok.secret.secretName }}
             {{- end }}
+          {{- end }}
+          env:
+          {{- with .Values.mongoDb }}
+          - name: MONGO_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .secretName }}
+                key: mongodb-passwords
           {{- end }}
           ports:
             - name: callback

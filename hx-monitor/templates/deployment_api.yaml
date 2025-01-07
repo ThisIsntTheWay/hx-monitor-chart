@@ -38,8 +38,16 @@ spec:
           image: "{{ .Values.components.api.image.repository }}:{{ .Values.components.api.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
-          - secretRef:
+          - configMapRef:
               name: {{ include "hx-monitor.fullname" . }}-mongo-config
+          env:
+          {{- with .Values.mongoDb }}
+          - name: MONGO_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .secretName }}
+                key: password
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080
