@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "hx-monitor.fullname" . }}-monitor
+  name: {{ include "hx-monitor.fullname" . }}-api
   labels:
-    component: monitor
+    component: api
     {{- include "hx-monitor.labels" . | nindent 4 }}
 spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: callback
+      targetPort: http
       protocol: TCP
-      name: callback
+      name: http
   selector:
-    component: monitor
+    component: api

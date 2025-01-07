@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "hx-monitor.fullname" . }}-monitor
+  name: {{ include "hx-monitor.fullname" . }}-frontend
   labels:
-    component: monitor
+    component: frontend
     {{- include "hx-monitor.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.components.frontend.replicas }}
   selector:
     matchLabels:
-      component: monitor
+      component: frontend
       {{- include "hx-monitor.selectorLabels" . | nindent 6 }}
   template:
     metadata:
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        component: monitor
+        component: frontend
         {{- include "hx-monitor.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
@@ -32,39 +32,27 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: monitor
+        - name: frontend
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.components.monitor.image.repository }}:{{ .Values.components.monitor.image.tag }}"
+          image: "{{ .Values.components.frontend.image.repository }}:{{ .Values.components.frontend.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
-          - configMapRef:
-              name: {{ include "hx-monitor.fullname" . }}-monitor-config
-          {{- if .Values.components.monitor.config.ngrok.enable }}
           - secretRef:
-            {{- if .Values.components.monitor.config.ngrok.secret.create }}
-              name: {{ include "hx-monitor.fullname" . }}-monitor-ngrok
-            {{- else }}
-              name: {{ .Values.components.monitor.config.ngrok.secret.secretName }}
-            {{- end }}
-          {{- end }}
+              name: {{ include "hx-monitor.fullname" . }}-mongo-config
           ports:
-            - name: callback
+            - name: http
               containerPort: 8080
               protocol: TCP
           livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
           readinessProbe:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          volumeMounts:
-            - name: whisper-models
-              mountPath: /opt/models_whisper
-      volumes:
-        - name: whisper-models
-          persistentVolumeClaim:
-            claimName: {{ include "hx-monitor.fullname" . }}-monitor-whisper
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
