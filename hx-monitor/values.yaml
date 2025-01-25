@@ -1,4 +1,5 @@
 nameOverride: ""
+namespaceOverride: ""
 fullnameOverride: ""
 
 # -------------------------------
@@ -23,7 +24,7 @@ components:
         # TWILIO_CALLBACK_URL will be dynamically set
       # -- ngrok config
       ngrok:
-        enable: create
+        enable: false
         secret:
           # -- Create secret. Set to 'false' if you bring your own secret
           #    Must have key "NGROK_AUTH"
@@ -69,6 +70,8 @@ mongoDb:
   port: 27017
   # -- HX monitor database name
   database: "hx"
+  # -- If defined uses custom auth database
+  authDatabase: "hx"
 
 # -------------------------------
 # -- Global image definitions

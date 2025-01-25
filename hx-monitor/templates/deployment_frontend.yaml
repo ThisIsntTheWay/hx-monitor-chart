@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "hx-monitor.fullname" . }}-frontend
+  namespace: {{ include "hx-monitor.namespace" . }}
   labels:
     component: frontend
     {{- include "hx-monitor.labels" . | nindent 4 }}
@@ -37,23 +38,20 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.components.frontend.image.repository }}:{{ .Values.components.frontend.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          envFrom:
-          - secretRef:
-              name: {{ include "hx-monitor.fullname" . }}-mongo-config
           env:
           - name: REACT_APP_API_BASE_URL
-            value: http://{{ include "hx-monitor.fullname" . }}-api:8080
+            value: {{ include "hx-monitor.ingressUrl" . }}
           {{- if .Values.components.frontend.config.airspacesJsonUrl }}
           - name: REACT_APP_AIRPSACES_JSON_URL
             value: {{ .Values.components.frontend.config.airspacesJsonUrl | quote }}
           {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: 80
               protocol: TCP
           livenessProbe:
             tcpSocket:
-              port: 8080
+              port: 80
             initialDelaySeconds: 15
             periodSeconds: 10
           readinessProbe:

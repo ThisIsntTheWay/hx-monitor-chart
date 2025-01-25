@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ include "hx-monitor.fullname" . }}-monitor-whisper
+  namespace: {{ include "hx-monitor.namespace" . }}
 spec:
   accessModes:
   - ReadWriteOnce

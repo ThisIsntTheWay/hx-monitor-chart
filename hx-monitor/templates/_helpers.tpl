@@ -6,6 +6,17 @@ Expand the name of the chart.
 {{- end }}
 
 {{/*
+Define the namespace.
+*/}}
+{{- define "hx-monitor.namespace" -}}
+{{- if .Values.namespaceOverride -}}
+{{ .Values.namespaceOverride }}
+{{- else -}}
+{{ .Release.Namespace }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
@@ -60,3 +71,22 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Returns the appropriate URL based on whether Ngrok is enabled or not.
+*/}}
+{{- define "hx-monitor.ngrokOrIngressUrl" -}}
+{{- if .Values.components.monitor.config.ngrok.enable -}}
+""
+{{- else -}}
+"http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.host }}"
+{{- end -}}
+{{- end -}}
+
+{{/*
+Assembles an URL based on the ingress specification in values.yaml.
+Uses http if TLS is not enabled, otherwise uses https.
+*/}}
+{{- define "hx-monitor.ingressUrl" -}}
+"http{{ if .Values.ingress.tls.enabled }}s{{ end }}://{{ .Values.ingress.host }}"
+{{- end -}}

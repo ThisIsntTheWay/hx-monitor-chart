@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "hx-monitor.fullname" . }}
+  namespace: {{ include "hx-monitor.namespace" . }}
   labels:
     {{- include "hx-monitor.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
@@ -12,7 +13,7 @@ spec:
   {{- with .Values.ingress.className }}
   ingressClassName: {{ . }}
   {{- end }}
-  {{- if .Values.ingress.tls }}
+  {{- if .Values.ingress.tls.enabled }}
   {{- with .Values.ingress }}
   tls:
     - hosts:

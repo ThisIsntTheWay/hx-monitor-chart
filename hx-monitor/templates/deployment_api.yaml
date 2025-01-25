@@ -1,7 +1,14 @@
+{{- if or (not .Values.mongoDb.secretName) (eq .Values.mongoDb.secretName "") }}
+{{ fail "Values.mongoDb.secretName is required and cannot be empty." }}
+{{- end }}
+{{- if or (not .Values.mongoDb.username) (eq .Values.mongoDb.username "") }}
+{{ fail "Values.mongoDb.username is required and cannot be empty." }}
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "hx-monitor.fullname" . }}-api
+  namespace: {{ include "hx-monitor.namespace" . }}
   labels:
     component: api
     {{- include "hx-monitor.labels" . | nindent 4 }}
@@ -46,7 +53,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: {{ .secretName }}
-                key: password
+                key: mongodb-passwords
           {{- end }}
           ports:
             - name: http
