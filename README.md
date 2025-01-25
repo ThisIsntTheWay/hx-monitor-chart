@@ -7,12 +7,12 @@ helm template hx-monitor
 
 ToDo:
 - Secrets
-  - [ ] MongoDB config
+  - [x] MongoDB config
 - Deployments, service
-  - [ ] Frontend
-  - [ ] API backend
+  - [x] Frontend
+  - [x] API backend
 - Ingress
-  - [ ] Frontend
-  - [ ] API backend
+  - [x] Frontend
+  - [x] API backend
 - Tests
   - [ ] Rewrite
