@@ -16,6 +16,15 @@ HX-Monitor Helm Chart
 | components.monitor.config.ngrok.secret.authToken | string | `""` | ngrok auth token, used if 'create: true' |
 | components.monitor.config.ngrok.secret.create | bool | `true` | Create secret. Set to 'false' if you bring your own secret    Must have key "NGROK_AUTH" |
 | components.monitor.config.ngrok.secret.name | string | `""` | Name of your own custom secret |
+| components.monitor.config.twilio | object | `{"secret":{"accountSid":"","apiKey":"","apiSecret":"","authToken":"","callFrom":"","create":true,"name":""}}` | Twilio credentials |
+| components.monitor.config.twilio.secret.accountSid | string | `""` | Twilio account SID |
+| components.monitor.config.twilio.secret.apiKey | string | `""` | Twilio API key  |
+| components.monitor.config.twilio.secret.apiSecret | string | `""` | Twilio API secret  |
+| components.monitor.config.twilio.secret.authToken | string | `""` | Twilio auth token |
+| components.monitor.config.twilio.secret.callFrom | string | `""` | Twilio call from number |
+| components.monitor.config.twilio.secret.create | bool | `true` | Create secret. Set to 'false' if you bring your own secret    See secret_twilio.yaml template for required keys |
+| components.monitor.config.twilio.secret.name | string | `""` | Name of your own custom secret |
+| components.monitor.config.whisper | object | `{"pvc":{"create":true,"name":"","size":"1Gi","storageClass":""}}` | Whisper config |
 | components.monitor.config.whisper.pvc | object | `{"create":true,"name":"","size":"1Gi","storageClass":""}` | PVC used for whisper models |
 | components.monitor.config.whisper.pvc.create | bool | `true` | Create PVC. Set to 'false' if you bring your own |
 | components.monitor.config.whisper.pvc.name | string | `""` | Name of your own custom PVC |

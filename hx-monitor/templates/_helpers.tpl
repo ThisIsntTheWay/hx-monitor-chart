@@ -84,6 +84,17 @@ Returns the appropriate URL based on whether Ngrok is enabled or not.
 {{- end -}}
 
 {{/*
+Assembles the name of the TWILIO credentials secret
+*/}}
+{{- define "hx-monitor.twilioCredentialsSecretName" -}}
+{{- if .Values.components.monitor.config.twilio.secret.create -}}
+{{ include "hx-monitor.fullname" . }}-twilio
+{{- else -}}
+{{- .Values.components.monitor.config.twilio.secret.name -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Assembles an URL based on the ingress specification in values.yaml.
 Uses http if TLS is not enabled, otherwise uses https.
 */}}

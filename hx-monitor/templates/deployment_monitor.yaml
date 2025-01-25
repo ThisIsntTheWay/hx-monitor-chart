@@ -43,6 +43,8 @@ spec:
               name: {{ include "hx-monitor.fullname" . }}-monitor-config
           - configMapRef:
               name: {{ include "hx-monitor.fullname" . }}-mongo-config
+          - secretRef:
+              name: {{ include "hx-monitor.twilioCredentialsSecretName" . }}
           {{- if .Values.components.monitor.config.ngrok.enable }}
           - secretRef:
             {{- if .Values.components.monitor.config.ngrok.secret.create }}
