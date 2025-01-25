@@ -40,6 +40,13 @@ spec:
           envFrom:
           - secretRef:
               name: {{ include "hx-monitor.fullname" . }}-mongo-config
+          env:
+          - name: REACT_APP_API_BASE_URL
+            value: http://{{ include "hx-monitor.fullname" . }}-api:8080
+          {{- if .Values.components.frontend.config.airspacesJsonUrl }}
+          - name: REACT_APP_AIRPSACES_JSON_URL
+            value: {{ .Values.components.frontend.config.airspacesJsonUrl | quote }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080
