@@ -47,11 +47,7 @@ spec:
               name: {{ include "hx-monitor.twilioCredentialsSecretName" . }}
           {{- if .Values.components.monitor.config.ngrok.enable }}
           - secretRef:
-            {{- if .Values.components.monitor.config.ngrok.secret.create }}
-              name: {{ include "hx-monitor.fullname" . }}-monitor-ngrok
-            {{- else }}
-              name: {{ .Values.components.monitor.config.ngrok.secret.secretName }}
-            {{- end }}
+              name: {{ include "hx-monitor.ngrokCredentialsSecretName" . }}
           {{- end }}
           env:
           {{- with .Values.mongoDb }}
@@ -60,6 +56,9 @@ spec:
               secretKeyRef:
                 name: {{ .secretName }}
                 key: mongodb-passwords
+          {{- end }}
+          {{- with .Values.podEnv }}
+          {{- toYaml . | nindent 10 }}
           {{- end }}
           ports:
             - name: callback

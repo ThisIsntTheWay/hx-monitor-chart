@@ -88,9 +88,20 @@ Assembles the name of the TWILIO credentials secret
 */}}
 {{- define "hx-monitor.twilioCredentialsSecretName" -}}
 {{- if .Values.components.monitor.config.twilio.secret.create -}}
-{{ include "hx-monitor.fullname" . }}-twilio
+{{ include "hx-monitor.fullname" . }}-monitor-twilio
 {{- else -}}
 {{- .Values.components.monitor.config.twilio.secret.name -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Assembles the name of the NGROK credentials secret
+*/}}
+{{- define "hx-monitor.ngrokCredentialsSecretName" -}}
+{{- if .Values.components.monitor.config.twilio.secret.create -}}
+{{ include "hx-monitor.fullname" . }}-monitor-ngrok
+{{- else -}}
+{{ .Values.components.monitor.config.ngrok.secret.name }}
 {{- end -}}
 {{- end -}}
 
