@@ -91,6 +91,8 @@ mongoDb:
   database: "hx"
   # -- If defined uses custom auth database
   authDatabase: "hx"
+  # -- Seed database with initial data (Destructive!)
+  seedDatabase: false
 
 # -------------------------------
 # -- Global image definitions
@@ -112,16 +114,18 @@ ingress:
     # -- Certificate secret
     secretName: ""
 
-# -------------------------------
-# -- Global pod configs
 serviceAccount:
   create: true
   automount: true
   annotations: {}
   name: ""
 
+# -------------------------------
+# -- Global pod configs
+
 podAnnotations: {}
 podLabels: {}
+podEnv: []
 
 podSecurityContext: {}
   # fsGroup: 2000

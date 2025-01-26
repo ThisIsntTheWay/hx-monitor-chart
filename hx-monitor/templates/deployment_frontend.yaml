@@ -45,6 +45,9 @@ spec:
           - name: REACT_APP_AIRPSACES_JSON_URL
             value: {{ .Values.components.frontend.config.airspacesJsonUrl | quote }}
           {{- end }}
+          {{- with .Values.podEnv }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 80

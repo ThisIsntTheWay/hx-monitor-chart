@@ -55,6 +55,9 @@ spec:
                 name: {{ .secretName }}
                 key: mongodb-passwords
           {{- end }}
+          {{- with .Values.podEnv }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080
