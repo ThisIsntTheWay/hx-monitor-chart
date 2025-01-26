@@ -36,21 +36,26 @@ HX-Monitor Helm Chart
 | ingress.host | string | `"chart-example.local"` | Host used for the ingress object (also TLS) |
 | ingress.tls.enabled | bool | `true` | Enable TLS |
 | ingress.tls.secretName | string | `""` | Certificate secret |
-| mongoDb | object | `{"authDatabase":"hx","database":"hx","host":"","port":27017,"secretName":"","username":""}` | MongoDB config |
+| mongoDb | object | `{"authDatabase":"hx","database":"hx","host":"","port":27017,"secretName":"","seedDatabase":false,"username":""}` | MongoDB config |
 | mongoDb.authDatabase | string | `"hx"` | If defined uses custom auth database |
 | mongoDb.database | string | `"hx"` | HX monitor database name |
 | mongoDb.host | string | `""` | MongoDB host |
 | mongoDb.port | int | `27017` | MongoDB port |
 | mongoDb.secretName | string | `""` | Name of MongoDB secret containing the password    It needs the key "mongodb-passwords" |
+| mongoDb.seedDatabase | bool | `false` | Seed database with initial data (Destructive!) |
 | mongoDb.username | string | `""` | MongoDB username |
 | nameOverride | string | `""` |  |
 | namespaceOverride | string | `""` |  |
 | nodeSelector | object | `{}` | Pods node selector |
-| podAnnotations | object | `{}` |  |
+| podAnnotations | object | `{}` | Global pod configs |
+| podEnv | list | `[]` |  |
 | podLabels | object | `{}` |  |
 | podSecurityContext | object | `{}` |  |
 | resources | object | `{}` | Pods resource constraints |
 | securityContext | object | `{}` |  |
-| serviceAccount | object | `{"annotations":{},"automount":true,"create":true,"name":""}` | Global pod configs |
+| serviceAccount.annotations | object | `{}` |  |
+| serviceAccount.automount | bool | `true` |  |
+| serviceAccount.create | bool | `true` |  |
+| serviceAccount.name | string | `""` |  |
 | tolerations | list | `[]` | Pods tolerations |
 
