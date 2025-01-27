@@ -69,8 +69,10 @@ components:
       tag: "latest"
   frontend:
     config:
-        # -- Uses SHV hosted JSON if left empty
-        airspacesJsonUrl: ""
+      # -- Uses SHV hosted JSON if left empty
+      airspacesJsonUrl: ""
+      # -- Pre-filter GeoJSON. Disable if hosting pre-filtered JSON.
+      filterGeoJson: true
     replicas: 1
     image:
       repository: thisisnttheway/hx-monitor-frontend

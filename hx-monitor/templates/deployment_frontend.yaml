@@ -45,6 +45,8 @@ spec:
           - name: REACT_APP_AIRPSACES_JSON_URL
             value: {{ .Values.components.frontend.config.airspacesJsonUrl | quote }}
           {{- end }}
+          - name: REACT_APP_PRE_FILTER_GEO_JSON
+            value: {{ .Values.components.frontend.config.filterGeoJson | quote }}
           {{- with .Values.podEnv }}
           {{- toYaml . | nindent 10 }}
           {{- end }}
