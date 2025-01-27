@@ -3,6 +3,10 @@
 helm template hx-monitor
 ```
 
+> [!WARNING]
+> By default, the chart uses the `latest` tag for container images.  
+> Versions of this chart are not coupled with versions of `hx-monitor` components.  
+
 ## Sample values
 ```yaml
 ingress:
