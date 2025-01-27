@@ -1,6 +1,4 @@
 # HX monitor chart
-Work in progress
-
 ```bash
 helm template hx-monitor
 ```
@@ -29,15 +27,3 @@ mongoDb:
   authDatabase: hx
   host: mongodb-headless.hx-monitor.svc.cluster.local
 ```
-
-ToDo:
-- Secrets
-  - [x] MongoDB config
-- Deployments, service
-  - [x] Frontend
-  - [x] API backend
-- Ingress
-  - [x] Frontend
-  - [x] API backend
-- Tests
-  - [ ] Rewrite
